@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export const useSetState = (initialState) => {
   const [state, setState] = useState(initialState);
@@ -10,4 +11,12 @@ export const useSetState = (initialState) => {
   return [state, newState];
 };
 
+export const throwError = (error) => {
+  toast.error(error, { hideProgressBar: true });
+};
 
+export const success = (success) => {
+  toast.success(success, {
+    hideProgressBar: true,
+  });
+};
