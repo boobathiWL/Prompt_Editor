@@ -84,7 +84,9 @@ const Home = () => {
         getPromptsData();
         success("Prompt added successfully");
       }
-    } catch (error) {}
+    } catch (error) {
+      throwError(error.response.data.error);
+    }
   };
 
   const editPrompt = (index) => {
@@ -107,7 +109,9 @@ const Home = () => {
         getPromptsData();
         success("Prompt edited successfully");
       }
-    } catch (error) {}
+    } catch (error) {
+      throwError(error.response.data.error);
+    }
   };
 
   const checkAIResponse = (data) =>
@@ -177,6 +181,7 @@ const Home = () => {
         aiScriptSuggestion: "",
         colorArray: [],
       });
+      throwError(error.response.data.error);
       console.log({ error });
     }
     setAiData({ scriptLoading: false });
