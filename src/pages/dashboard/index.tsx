@@ -334,7 +334,7 @@ const Home = () => {
             <ScriptSection
               script={promptData.script}
               onChange={handleScriptChange}
-              className={promptData.scriptExtend ? "h-[39rem]" : ""}
+              className={promptData.scriptExtend ? "min-h-[40rem]" : ""}
             />
             <span className="flex justify-end pr-2">
               <NavigateIcon
