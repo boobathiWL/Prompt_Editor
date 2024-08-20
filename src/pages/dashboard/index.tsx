@@ -115,10 +115,7 @@ const Home = () => {
   };
 
   const checkAIResponse = (data) =>
-    data.includes("Based on the script and outline provided") ||
-    data.includes("Here are the transition")
-      ? true
-      : false;
+    /apologize/i.test(data) || /unfortunately/i.test(data) ? false : true;
 
   const handleGeneratePrompt = async (index) => {
     try {
@@ -164,7 +161,9 @@ const Home = () => {
               setPromptData({ enableUpdateScript: true });
             }
           } else {
-            throwError("Try again");
+            throwError(
+              "Please review your script and outline, then try again."
+            );
           }
         }
       } else {
@@ -195,8 +194,10 @@ const Home = () => {
         const [numbers, ...textParts] = line.split(": "); // Split by the first ': '
         const text = textParts.join(": ").trim(); // Join back any remaining parts
         const number = numbers.trim();
-        if (number.length <= 5) {
-          output[number] = text; // Create an object with number and text
+        if (!Number.isNaN(Number(number))) {
+          if (number.length <= 5) {
+            output[number] = text; // Create an object with number and text
+          }
         }
       });
     return output;
