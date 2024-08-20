@@ -12,6 +12,8 @@ import ExportToDoc from "@/components/export_document";
 import Button from "@/components/button";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import NavigateIcon from "@/components/navigate_icon";
+import EyeButton from "@/components/eye_button";
 
 const Home = () => {
   const [promptData, setPromptData] = useSetState({
@@ -24,9 +26,12 @@ const Home = () => {
     promptModalOpen: false,
     promptEdit: false,
     promptLoading: false,
+    scriptExtend: false,
+    showAiResponse: false,
   });
 
   const [aiData, setAiData] = useSetState({
+    response: "",
     aiScriptSuggestion: "",
     scriptLoading: false,
     colorArray: [],
@@ -126,6 +131,7 @@ const Home = () => {
           .replace("{{SCRIPT}}", promptData.script)
           .replace("{{OUTLINE}}", promptData.outline);
         const response = await axios.post("api/prompt", { prompt: content });
+        setAiData({ response: response?.data?.content[0]?.text });
         if (response?.status == 200) {
           if (checkAIResponse(response?.data?.content[0]?.text)) {
             const aiContent = convertScriptToObject(
@@ -177,6 +183,7 @@ const Home = () => {
       }
     } catch (error) {
       setAiData({
+        response: "",
         aiScriptSuggestion: "",
         colorArray: [],
       });
@@ -208,7 +215,11 @@ const Home = () => {
     if (aiData.aiScriptSuggestion.length > 0) {
       const text = aiData.aiScriptSuggestion.join("\n\n ");
 
-      setPromptData({ script: text, enableUpdateScript: false });
+      setPromptData({
+        script: text,
+        enableUpdateScript: false,
+        scriptExtend: false,
+      });
       setAiData({ aiScriptSuggestion: "" });
       success("Script updated successfully");
     } else {
@@ -248,6 +259,7 @@ const Home = () => {
       }
       window.navigator.clipboard.writeText(text);
       setCopy(true);
+      setPromptData({ scriptExtend: false });
       success("Script copied successfully");
       setTimeout(() => {
         setCopy(false);
@@ -265,12 +277,19 @@ const Home = () => {
         text = removeNumberFromArrText(promptData.scripts);
       }
       ExportToDoc(text, "Script_Document");
-      setPromptData({ exportModalOpen: false });
+      setPromptData({ exportModalOpen: false, scriptExtend: false });
       setExports(false);
       success("Script exported successfully");
     } else {
       throwError("Script export failed");
     }
+  };
+
+  const handleAIresponseShow = async () => {
+    setPromptData({ showAiResponse: !promptData.showAiResponse });
+  };
+  const handleScriptPosition = () => {
+    setPromptData({ scriptExtend: !promptData.scriptExtend });
   };
   useEffect(() => {
     if (promptData.script) {
@@ -311,32 +330,66 @@ const Home = () => {
         />
         {/* Left side - Script, Outline, and Prompts list */}
         <div className="flex flex-col w-1/2 mr-8 space-y-6">
-          <ScriptSection
-            script={promptData.script}
-            onChange={handleScriptChange}
-          />
-          <OutlineSection
-            outline={promptData.outline}
-            onChange={handleOulineChange}
-          />
-          <PromptsSection
-            prompts={promptData?.prompts}
-            loading={promptData.promptLoading}
-            onAdd={addPrompt}
-            onEdit={editPrompt}
-            onGenerate={handleGeneratePrompt}
-          />
+          <span>
+            <ScriptSection
+              script={promptData.script}
+              onChange={handleScriptChange}
+              className={promptData.scriptExtend ? "h-[39rem]" : ""}
+            />
+            <span className="flex justify-end pr-2">
+              <NavigateIcon
+                position={promptData?.scriptExtend}
+                onClick={handleScriptPosition}
+              />
+            </span>
+          </span>
+
+          {!promptData.scriptExtend ? (
+            <>
+              <OutlineSection
+                outline={promptData.outline}
+                onChange={handleOulineChange}
+              />
+              <PromptsSection
+                prompts={promptData?.prompts}
+                loading={promptData.promptLoading}
+                onAdd={addPrompt}
+                onEdit={editPrompt}
+                onGenerate={handleGeneratePrompt}
+              />
+            </>
+          ) : (
+            ""
+          )}
         </div>
 
         {/* Right side - Text editor and buttons */}
         <div className="w-1/2">
-          <label className="block mb-2 font-semibold text-gray-700">
-            Output
-          </label>
+          <div className="grid grid-cols-12">
+            <label className="block mb-2 font-semibold text-gray-700 col-span-11">
+              Output
+            </label>
+            <span>
+              <EyeButton
+                show={promptData.showAiResponse}
+                onClick={handleAIresponseShow}
+                disabled={aiData.response ? false : true}
+              />
+            </span>
+          </div>
 
           {aiData?.scriptLoading ? (
             <div className="flex items-center justify-center p-4 w-full border border-gray-300 rounded-lg shadow-sm bg-white h-[40rem] focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150">
               <Spinner />
+            </div>
+          ) : promptData.showAiResponse && aiData.response ? (
+            <div className="p-4 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none resize-none h-[40rem] bg-white  focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150">
+              <textarea
+                name="ai_data"
+                id="ai_data"
+                value={aiData?.response}
+                className="w-full resize-none h-[38rem] bg-white focus:outline-none overflow-scroll"
+              ></textarea>
             </div>
           ) : (
             <div className="p-4 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none resize-none h-[40rem] bg-white  focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 overflow-scroll">

@@ -6,7 +6,7 @@ import Spinner from "../Spinner";
 const PromptsSection = ({ prompts, onAdd, onEdit, onGenerate, loading }) => (
   <div>
     <label className="block mb-2 font-semibold text-gray-700">Prompts</label>
-    <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-lg h-[18rem] transition duration-150 hover:shadow-xl overflow-y-auto">
+    <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-lg h-[17rem] transition duration-150 hover:shadow-xl overflow-y-auto">
       <Button
         onClick={onAdd}
         className="w-full mb-4 text-white transition duration-150 bg-blue-600 hover:bg-blue-700"

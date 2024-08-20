@@ -1,4 +1,4 @@
-import TextArea from "../test_area";
+import TextArea from "../text_area";
 
 const OutlineSection = ({ outline, onChange }) => (
   <TextArea
