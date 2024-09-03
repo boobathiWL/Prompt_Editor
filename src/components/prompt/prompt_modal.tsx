@@ -24,7 +24,6 @@ const PromptModal = ({ open, prompt, onSave, onClose, type, setPrompt }) => {
   const {
     register,
     handleSubmit,
-    setError,
     formState,
     reset,
     setValue,
@@ -35,10 +34,9 @@ const PromptModal = ({ open, prompt, onSave, onClose, type, setPrompt }) => {
 
   const onSubmit = (data) => {
     if (type) {
-      data = { ...data, index: prompt.index };
+      data = { ...data, index: prompt?.index };
     }
     onSave(data);
-    reset();
   };
   const handleClose = () => {
     onClose();
@@ -47,8 +45,8 @@ const PromptModal = ({ open, prompt, onSave, onClose, type, setPrompt }) => {
 
   useEffect(() => {
     if (type) {
-      setValue("title", prompt.title);
-      setValue("content", prompt.content);
+      setValue("title", prompt?.title);
+      setValue("content", prompt?.content);
     } else {
       reset();
     }
@@ -80,9 +78,9 @@ const PromptModal = ({ open, prompt, onSave, onClose, type, setPrompt }) => {
           className="block w-full p-3 mb-2 transition duration-150 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         {/* Check if errors.title exists and render its message */}
-        {errors.title && (
+        {errors?.title && (
           <p className="mb-4 text-red-600">
-            {errors.title.message?.toString()}
+            {errors?.title?.message?.toString()}
           </p>
         )}
 
@@ -100,9 +98,9 @@ const PromptModal = ({ open, prompt, onSave, onClose, type, setPrompt }) => {
           className="block w-full h-[25rem] p-3 mb-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-150"
           placeholder="Enter prompt details..."
         ></textarea>
-        {errors.content && (
+        {errors?.content && (
           <p className="mb-4 text-red-600">
-            {errors.content.message?.toString()}
+            {errors?.content?.message?.toString()}
           </p>
         )}
 

@@ -20,3 +20,11 @@ export const success = (success) => {
     hideProgressBar: true,
   });
 };
+
+export const formatNameFirstLetterCap = (name) =>
+  name
+    .toLowerCase() // Convert to lowercase
+    .toLowerCase()
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");

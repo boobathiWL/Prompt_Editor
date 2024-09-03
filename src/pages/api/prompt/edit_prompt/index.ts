@@ -1,10 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import connectMongoDB from "@/libs/connect";
 import prompt_schema from "@/libs/models/prompt";
-import Prompt from "@/libs/models/prompt";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(
+import authMiddleware from "@/libs/authMiddleware";
+ async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -38,3 +37,5 @@ export default async function handler(
     return res.status(500).json({ error: error.message });
   }
 }
+export default authMiddleware(handler);
+// export default handler;

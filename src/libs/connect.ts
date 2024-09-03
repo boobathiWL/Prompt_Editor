@@ -11,7 +11,7 @@ const connectMongoDB = async () => {
     const url = process.env.MONGO_URI;
 
     const db = await mongoose.connect(url);
-    connection.isConnected = db.connections[0].readyState;
+    connection.isConnected = db?.connections[0]?.readyState;
     console.log("connected to atlas mongodb");
   } catch (error) {
     console.log("MongoDB connection failed", error.message);

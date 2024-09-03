@@ -10,7 +10,7 @@ export default function Spinner(props: SpinnerProps) {
     <>
       <div
         className={`${
-          size === "sm" ? "h-6 w-6" : "h-8 w-8"
+          size === "sm" ? "h-5 w-5" : size === "md" ? "h-6 w-6" : "h-8 w-8"
         }  motion-reduce:animate-[spin_1.2s_linear_infinite]} inline-block animate-spin rounded-full border-[2.5px] border-solid border-blue-600 border-r-gray-300 align-[-0.125em] ${className}`}
         role="status"
       >

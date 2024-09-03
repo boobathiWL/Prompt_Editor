@@ -21,7 +21,7 @@ const EyeButton = ({ show, onClick, disabled }) => (
         <EyeIcon className="h-6 w-6" aria-hidden="true" />
       ) : (
         <EyeOffIcon className="h-6 w-6" aria-hidden="true" />
-      )}{" "}
+      )}
     </button>
   </div>
 );

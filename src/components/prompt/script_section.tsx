@@ -3,7 +3,7 @@ import TextArea from "../text_area";
 const ScriptSection = ({ script, onChange, className = "" }) => (
   <>
     <TextArea
-      label="Script"
+      label=""
       placeholder="Add your script here..."
       value={script}
       onChange={onChange}

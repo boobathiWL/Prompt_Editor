@@ -6,7 +6,7 @@ const TextArea = ({ label, placeholder, value, onChange, className }) => {
         className={`p-4 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none ${className}`}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e?.target?.value)}
       ></textarea>
     </div>
   );

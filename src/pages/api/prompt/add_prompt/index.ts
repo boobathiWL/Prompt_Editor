@@ -2,8 +2,9 @@
 import connectMongoDB from "@/libs/connect";
 import Prompt from "@/libs/models/prompt";
 import type { NextApiRequest, NextApiResponse } from "next";
+import authMiddleware from "@/libs/authMiddleware";
 
-export default async function handler(
+ async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -30,3 +31,5 @@ export default async function handler(
     return res.status(500).json({ error: error.message });
   }
 }
+export default authMiddleware(handler);
+// export default handler;

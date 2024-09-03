@@ -1,9 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import connectMongoDB from "@/libs/connect";
 import prompt_schema from "@/libs/models/prompt";
-import type { NextApiRequest, NextApiResponse } from "next";
+import authMiddleware from "@/libs/authMiddleware";
 
-export default async function handler(req, res) {
+ async function handler(req, res) {
   await connectMongoDB();
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Method Not Allowed" });
@@ -17,3 +17,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
+
+export default authMiddleware(handler);
+// export default handler;
+
