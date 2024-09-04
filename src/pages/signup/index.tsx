@@ -46,7 +46,10 @@ const validationSchema = yup.object().shape({
     .required("Email is required")
     .test(`test-email`, function (value: string | undefined) {
       const { path, createError } = this;
-      if (value && !value.includes("@wl.team")) {
+      if (
+        value &&
+        !(value.includes("@wl.team") || value.includes("@websitelearners.com"))
+      ) {
         return createError({
           path,
           message: "This email is not associated with the WL family",
