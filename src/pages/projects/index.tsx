@@ -59,7 +59,7 @@ function Project() {
               ...data,
               id: projectId,
             })
-          : await axios.post("api/project/outline_project/edit_project", {
+          : await axios.post("api/outline_project/edit_project", {
               ...data,
               outline_moral: data.script_moral,
               id: projectId,
@@ -87,7 +87,7 @@ function Project() {
       const response =
         projectData.page == "Script"
           ? await axios.post("api/project/add_project", data)
-          : await axios.post("api/project/outline_project/add_project", {
+          : await axios.post("api/outline_project/add_project", {
               ...data,
               outline_moral: data.script_moral,
             });
@@ -110,7 +110,7 @@ function Project() {
     try {
       const response =
         page == "outline"
-          ? await axios.get("api/project/outline_project/get_projects")
+          ? await axios.get("api/outline_project/get_projects")
           : await axios.get("api/project/get_projects");
       if (response.status == 201) {
         setProjectData({ project: response.data.project });

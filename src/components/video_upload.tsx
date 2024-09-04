@@ -11,7 +11,7 @@ interface VideoUploaderProps {
 function VideoUploader({ onVideoSelect, loading, path }: VideoUploaderProps) {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [pathControl, setPathControl] = useState(false);
-  const [filePath,setFilePath]=useState("")
+  const [filePath, setFilePath] = useState("");
 
   const onDrop = (acceptedFiles: File[]) => {
     const selectedFile = acceptedFiles.length > 0 ? acceptedFiles[0] : null;
@@ -21,22 +21,20 @@ function VideoUploader({ onVideoSelect, loading, path }: VideoUploaderProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      "video/*": [".mp4", ".mov", ".avi", ".mkv"],
-    },
+    accept: undefined,
   });
   useEffect(() => {
     if (path) {
-      const file=path.split("/")
-      const filePath=`/uploads/${file[file.length-1]}`
-      setFilePath(filePath)
+      const file = path.split("/");
+      const filePath = `/uploads/${file[file.length - 1]}`;
+      setFilePath(filePath);
       setPathControl(true);
     }
-    if(pathControl){
-      setPathControl(false)
+    if (pathControl) {
+      setPathControl(false);
     }
   }, [path]);
-  filePath && console.log(filePath)
+  filePath && console.log(filePath);
   return (
     <div className="bg-gray-100">
       <div
@@ -57,11 +55,7 @@ function VideoUploader({ onVideoSelect, loading, path }: VideoUploaderProps) {
             )}
           </p>
         ) : (
-          <video
-            src={filePath}
-            controls
-            className="w-full h-full rounded-lg"
-          />
+          <video src={filePath} controls className="w-full h-full rounded-lg" />
         )}
       </div>
     </div>
