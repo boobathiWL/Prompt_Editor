@@ -5,9 +5,9 @@ const connection: { isConnected?: number } = {};
 //mongodb connect
 const connectMongoDB = async () => {
   try {
-    if (connection.isConnected) {
-      return;
-    }
+    // if (connection.isConnected) {
+    //   return;
+    // }
     const url = process.env.MONGO_URI;
 
     const db = await mongoose.connect(url);
