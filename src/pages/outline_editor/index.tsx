@@ -77,7 +77,7 @@ const PromptEditor = () => {
   const getPromptsData = async () => {
     setPromptData({ promptLoading: true });
     try {
-      const response = await axios.get("api/outline_prompt/get_prompt");
+      const response = await axios.get("api/outline_prompt/outline_get_prompt");
       if (response.status == 200) {
         const data = response.data.prompt;
         let prompts = [];
@@ -100,10 +100,13 @@ const PromptEditor = () => {
 
     const { title, content } = data;
     try {
-      const response = await axios.post("api/outline_prompt/add_prompt", {
-        title,
-        content,
-      });
+      const response = await axios.post(
+        "api/outline_prompt/outline_add_prompt",
+        {
+          title,
+          content,
+        }
+      );
       if (response.status == 201) {
         getPromptsData();
         success("Prompt added successfully");
@@ -124,11 +127,14 @@ const PromptEditor = () => {
     const { title, content, index } = data;
     const _id = promptData.prompts[index]._id;
     try {
-      const response = await axios.put("api/outline_prompt/edit_prompt", {
-        title,
-        content,
-        _id,
-      });
+      const response = await axios.put(
+        "api/outline_prompt/outline_edit_prompt",
+        {
+          title,
+          content,
+          _id,
+        }
+      );
       if (response.status == 201) {
         getPromptsData();
         success("Prompt edited successfully");
@@ -208,7 +214,7 @@ const PromptEditor = () => {
     const id = router.query.project;
     try {
       const response = await axios.get(
-        `api/outline_project/get_projects/${id}`
+        `api/outline_project/outline_get_projects/${id}`
       );
       if (response.status == 201) {
         setProjectData({
@@ -238,14 +244,11 @@ const PromptEditor = () => {
 
     const projectId = router.query.project;
     try {
-      const response = await axios.post(
-        "api/outline_project/edit_project",
-        {
-          ...data,
-          outline_moral: data.script_moral,
-          id: projectId,
-        }
-      );
+      const response = await axios.post("api/outline_project/outline_edit_project", {
+        ...data,
+        outline_moral: data.script_moral,
+        id: projectId,
+      });
       if (response.status == 201) {
         success(response.data.message);
         setProjectData({
@@ -304,7 +307,7 @@ const PromptEditor = () => {
     formData.append("file", file);
     try {
       const response = await axios.post(
-        "api/outline_project/upload_video",
+        "api/outline_project/outline_upload_video",
         formData,
         {
           headers: {
