@@ -34,7 +34,6 @@ function VideoUploader({ onVideoSelect, loading, path }: VideoUploaderProps) {
       setPathControl(false);
     }
   }, [path]);
-  filePath && console.log(filePath);
   return (
     <div className="bg-gray-100">
       <div
@@ -54,9 +53,11 @@ function VideoUploader({ onVideoSelect, loading, path }: VideoUploaderProps) {
               " Drag & drop a video here, or click to select a file"
             )}
           </p>
-        ) : (
-          <video src={filePath} controls className="w-full h-full rounded-lg" />
-        )}
+        ) :filePath? (
+          <p className="text-center text-gray-500 flex items-center justify-center h-full">
+            Video Uploaded
+          </p>
+        ):""}
       </div>
     </div>
   );
