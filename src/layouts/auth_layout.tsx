@@ -7,7 +7,7 @@ export default function Auth({ title = "", children }) {
   return (
       <main>
         <div className="flex h-full content-center items-center justify-center">
-          <div className="w-full px-4 lg:w-4/12">
+          <div className="w-full px-4">
             {children}
           </div>
           <Toast type="auth"/>
