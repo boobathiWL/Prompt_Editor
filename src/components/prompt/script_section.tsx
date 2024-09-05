@@ -7,7 +7,7 @@ const ScriptSection = ({ script, onChange, className = "" }) => (
       placeholder="Add your script here..."
       value={script}
       onChange={onChange}
-      className={`h-[9rem] border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 ${className}`}
+      className={`border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 ${className}`}
     />
   </>
 );

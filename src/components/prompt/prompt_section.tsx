@@ -14,10 +14,11 @@ const PromptsSection = ({
   promptStatus,
   generate,
   generateDisabled = false,
+  className = false,
 }) => (
-  <div>
+  <div className="flex flex-col flex-1">
     <label className="block mb-2 font-semibold text-gray-700">Prompts</label>
-    <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-lg h-[17rem] transition duration-150 hover:shadow-xl overflow-y-auto">
+    <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-lg transition duration-150 hover:shadow-xl overflow-y-auto">
       {role === "super_admin" && (
         <Button
           onClick={onAdd}
@@ -26,7 +27,11 @@ const PromptsSection = ({
           Add Prompt
         </Button>
       )}
-      <div className="flex flex-col space-y-1 ">
+      <div
+        className={`flex flex-col space-y-1 flex-1 overflow-y-auto ${
+          className ? "min-h-[30vh] max-h-[31vh]" : "max-h-[30vh]"
+        }`}
+      >
         {loading ? (
           <div className="text-center flex justify-center p-16">
             <Spinner />

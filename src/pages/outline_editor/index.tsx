@@ -244,11 +244,14 @@ const PromptEditor = () => {
 
     const projectId = router.query.project;
     try {
-      const response = await axios.post("api/outline_project/outline_edit_project", {
-        ...data,
-        outline_moral: data.script_moral,
-        id: projectId,
-      });
+      const response = await axios.post(
+        "api/outline_project/outline_edit_project",
+        {
+          ...data,
+          outline_moral: data.script_moral,
+          id: projectId,
+        }
+      );
       if (response.status == 201) {
         success(response.data.message);
         setProjectData({
@@ -325,8 +328,8 @@ const PromptEditor = () => {
   return (
     <>
       {user ? (
-        <>
-          <nav className="flex items-center space-x-2 text-sm text-gray-600 bg-gray-100 pl-4 pt-2">
+        <div>
+          <nav className="flex items-center space-x-2 text-sm text-gray-600  pl-4 pt-2">
             <div
               className="cursor-pointer hover:text-gray-800 bg-gray-300 p-2 rounded-full shadow-sm"
               onClick={() => router.push("/projects?page=outline")}
@@ -344,23 +347,24 @@ const PromptEditor = () => {
             <span className="mx-2">/</span>
             <span className="text-gray-500">Outline Editor</span>
           </nav>
-          <div className="flex p-4 overflow-hidden bg-gray-100">
+          <div className="flex flex-1 h-full p-4 overflow-hidden bg-gray-100">
             {/* Left side - Script, Outline, and Prompts list */}
-            <div className="flex flex-col w-1/2 mr-8 space-y-6">
-              <span className="mb-8">
-                <span className="">
-                  <label className="block mb-2 font-semibold text-gray-700">
-                    Video
-                  </label>
-                  <VideoUploader
-                    onVideoSelect={handleVideoFile}
-                    loading={promptData?.videoLoading}
-                    path={promptData?.video?.filePath}
-                  />
+            <div className="flex flex-1 flex-col w-1/2 mr-8 space-y-6  h-[90vh]">
+              <div className="flex-1">
+                <span className="mb-8">
+                  <span className="">
+                    <label className="block mb-2 font-semibold text-gray-700">
+                      Video
+                    </label>
+                    <VideoUploader
+                      onVideoSelect={handleVideoFile}
+                      loading={promptData?.videoLoading}
+                      path={promptData?.video?.filePath}
+                    />
+                  </span>
                 </span>
-              </span>
-
-              <div className="h-[10rem]">
+              </div>
+              <div className="flex flex-1">
                 <PromptsSection
                   generate={
                     user?._id === projectData?.project?.user_id ? true : false
@@ -373,98 +377,97 @@ const PromptEditor = () => {
                   onEdit={editPrompt}
                   onGenerate={handleGeneratePrompt}
                   generateDisabled={promptData.generateControl}
+                  className={true}
                 />
               </div>
             </div>
             {/* Right side - Text editor and buttons */}
-            <div className="w-1/2">
-              <div className="grid grid-cols-12">
-                <label className="block mb-2 font-semibold text-gray-700 col-span-9">
-                  Output
-                </label>
-                <div className="col-span-2 flex gap-1 pl-10">
-                  <button
-                    onClick={handleAIOutputFirstPage}
-                    className={`${
-                      projectData?.currentOutputIndex == 0 ||
-                      projectData?.project?.output?.length == 0
-                        ? "opacity-30 cursor-not-allowed"
-                        : "cursor-pointer"
-                    } `}
-                  >
-                    <FaChevronLeft />
-                  </button>
-                  <button className="text-sm">
-                    {projectData?.project?.output?.length
-                      ? `${projectData.currentOutputIndex + 1}/${
-                          projectData?.project?.output?.length
-                        }`
-                      : 0}
-                  </button>
-                  <button
-                    className={`${
-                      projectData?.project?.output?.length ==
-                        projectData?.currentOutputIndex + 1 ||
-                      projectData?.project?.output?.length == 0
-                        ? "opacity-30 cursor-not-allowed"
-                        : "cursor-pointer"
-                    } `}
-                    onClick={handleAIOutputNextPage}
-                  >
-                    <FaChevronRight />
-                  </button>
+            <div className="w-1/2 flex flex-col flex-1">
+              <div className="flex flex-col">
+                <div className="grid grid-cols-12">
+                  <label className="block mb-2 font-semibold text-gray-700 col-span-10">
+                    Output
+                  </label>
+                  <div className="col-span-2 flex gap-1 pl-10">
+                    <button
+                      onClick={handleAIOutputFirstPage}
+                      className={`${
+                        projectData?.currentOutputIndex == 0 ||
+                        projectData?.project?.output?.length == 0
+                          ? "opacity-30 cursor-not-allowed"
+                          : "cursor-pointer"
+                      } `}
+                    >
+                      <FaChevronLeft />
+                    </button>
+                    <button className="text-sm">
+                      {projectData?.project?.output?.length
+                        ? `${projectData.currentOutputIndex + 1}/${
+                            projectData?.project?.output?.length
+                          }`
+                        : 0}
+                    </button>
+                    <button
+                      className={`${
+                        projectData?.project?.output?.length ==
+                          projectData?.currentOutputIndex + 1 ||
+                        projectData?.project?.output?.length == 0
+                          ? "opacity-30 cursor-not-allowed"
+                          : "cursor-pointer"
+                      } `}
+                      onClick={handleAIOutputNextPage}
+                    >
+                      <FaChevronRight />
+                    </button>
+                  </div>
                 </div>
-
-                {/* <span>
-                  <EyeButton
-                    show={promptData.showAiResponse}
-                    onClick={handleAIresponseShow}
-                    disabled={aiData.response ? false : true}
-                  />
-                </span> */}
               </div>
-
-              {aiData?.outlineLoading ? (
-                <div className="flex items-center justify-center p-4 w-full border border-gray-300 rounded-lg shadow-sm bg-white h-[40rem] focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150">
-                  <Spinner />
+              <div className="flex flex-1 flex-col h-full">
+                <div className="flex flex-1 flex-col">
+                  {aiData?.outlineLoading ? (
+                    <div className="flex flex-1 items-center justify-center p-4 w-full border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150">
+                      <Spinner />
+                    </div>
+                  ) : (
+                    <textarea
+                      name="outline_output"
+                      id="outline_output"
+                      onChange={(e) =>
+                        setAiData({ aiOutlineSuggestion: e.target.value })
+                      }
+                      value={aiData?.aiOutlineSuggestion}
+                      placeholder="Output contents..."
+                      className="p-4 w-full h-full  border border-gray-300 rounded-lg shadow-sm focus:outline-none resize-none bg-white  focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 overflow-scroll "
+                    ></textarea>
+                  )}
                 </div>
-              ) : (
-                <textarea
-                  name="outline_output"
-                  id="outline_output"
-                  onChange={(e) =>
-                    setAiData({ aiOutlineSuggestion: e.target.value })
-                  }
-                  value={aiData?.aiOutlineSuggestion}
-                  placeholder="Output contents..."
-                  className="p-4 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none resize-none h-[39rem] bg-white  focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 overflow-scroll "
-                ></textarea>
-              )}
-
-              <div className="grid grid-cols-12 gap-4 mt-4">
-                <div className="col-span-3"></div>
-                <div className="flex justify-end col-span-9 space-x-4">
-                  <Button
-                    onClick={handleCopy}
-                    className={`text-gray-600 transition duration-150 bg-gray-200 hover:bg-gray-300  ${
-                      !copy ? "" : "opacity-30 cursor-not-allowed"
-                    }`}
-                    disabled={copy ? true : false}
-                  >
-                    {copy ? "Copied" : "Copy"}
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setPromptData({ exportModalOpen: true });
-                      setExports(true);
-                    }}
-                    disabled={exports}
-                    className={`px-6 py-2 text-white transition duration-150 bg-blue-600 hover:bg-blue-700 ${
-                      exports ? "opacity-30 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    {exports ? "Exporting.." : "Export"}
-                  </Button>
+                <div>
+                  <div className="grid grid-cols-12 gap-4 mt-2">
+                    <div className="col-span-3"></div>
+                    <div className="flex justify-end col-span-9 space-x-4">
+                      <Button
+                        onClick={handleCopy}
+                        className={`text-gray-600 transition duration-150 bg-gray-200 hover:bg-gray-300  ${
+                          !copy ? "" : "opacity-30 cursor-not-allowed"
+                        }`}
+                        disabled={copy ? true : false}
+                      >
+                        {copy ? "Copied" : "Copy"}
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setPromptData({ exportModalOpen: true });
+                          setExports(true);
+                        }}
+                        disabled={exports}
+                        className={`px-6 py-2 text-white transition duration-150 bg-blue-600 hover:bg-blue-700 ${
+                          exports ? "opacity-30 cursor-not-allowed" : ""
+                        }`}
+                      >
+                        {exports ? "Exporting.." : "Export"}
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -491,7 +494,7 @@ const PromptEditor = () => {
               type={promptData.promptEdit}
             />
           )}
-        </>
+        </div>
       ) : (
         <Unauthorized />
       )}

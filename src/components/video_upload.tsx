@@ -35,10 +35,10 @@ function VideoUploader({ onVideoSelect, loading, path }: VideoUploaderProps) {
     }
   }, [path]);
   return (
-    <div className="bg-gray-100">
+    <>
       <div
         {...getRootProps()}
-        className={`border-2 rounded-lg cursor-pointer transition-all mb-4 w-full h-64 ${
+        className={`border-2 rounded-lg cursor-pointer transition-all mb-4 w-full min-h-64 flex justify-center items-center ${
           isDragActive
             ? "border-blue-500 bg-blue-100"
             : "border-gray-300 bg-white"
@@ -46,7 +46,7 @@ function VideoUploader({ onVideoSelect, loading, path }: VideoUploaderProps) {
       >
         <input {...getInputProps()} />
         {!pathControl || loading ? (
-          <p className="text-center text-gray-500 flex items-center justify-center h-full">
+          <p className="text-center text-gray-500">
             {loading ? (
               <Spinner />
             ) : (
@@ -54,12 +54,12 @@ function VideoUploader({ onVideoSelect, loading, path }: VideoUploaderProps) {
             )}
           </p>
         ) :filePath? (
-          <p className="text-center text-gray-500 flex items-center justify-center h-full">
+          <p className="text-center text-gray-500 ">
             Video Uploaded
           </p>
         ):""}
       </div>
-    </div>
+    </>
   );
 }
 

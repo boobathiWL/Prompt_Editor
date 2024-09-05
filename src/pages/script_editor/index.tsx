@@ -477,8 +477,8 @@ const PromptEditor = () => {
   return (
     <>
       {user ? (
-        <>
-          <nav className="flex items-center space-x-2 text-sm text-gray-600 bg-gray-100 pl-4 pt-2">
+        <div className="bg-gray-100">
+          <nav className="flex items-center space-x-2 text-sm text-gray-600 pl-4 pt-2">
             <div
               className="cursor-pointer hover:text-gray-800 bg-gray-300 p-2 rounded-full shadow-sm"
               onClick={() => router.push("/projects")}
@@ -496,10 +496,10 @@ const PromptEditor = () => {
             <span className="mx-2">/</span>
             <span className="text-gray-500">Script Editor</span>
           </nav>
-          <div className="flex p-4 overflow-hidden bg-gray-100">
+          <div className="flex p-4 overflow-hidden">
             {/* Left side - Script, Outline, and Prompts list */}
-            <div className="flex flex-col w-1/2 mr-8 space-y-6">
-              <span>
+            <div className="flex flex-col flex-1 w-1/2 mr-8 space-y-6">
+              <div className="flex flex-col flex-1">
                 <span className="flex justify-between">
                   <label className="block mb-2 font-semibold text-gray-700">
                     Script
@@ -541,7 +541,7 @@ const PromptEditor = () => {
                 <ScriptSection
                   script={promptData.script}
                   onChange={handleScriptChange}
-                  className={promptData.scriptExtend ? "min-h-[40rem]" : ""}
+                  className={promptData.scriptExtend ? "min-h-[80vh]" : ""}
                 />
 
                 <span className="flex justify-end pr-2">
@@ -550,14 +550,19 @@ const PromptEditor = () => {
                     onClick={handleScriptPosition}
                   />
                 </span>
-              </span>
-
-              {!promptData.scriptExtend ? (
-                <>
+              </div>
+              <div className="flex flex-1 flex-col">
+                {!promptData.scriptExtend ? (
                   <OutlineSection
                     outline={promptData.outline}
                     onChange={handleOulineChange}
                   />
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="flex flex-1 flex-col">
+                {!promptData.scriptExtend ? (
                   <PromptsSection
                     generate={
                       user?._id === projectData?.project?.user_id ? true : false
@@ -570,101 +575,105 @@ const PromptEditor = () => {
                     onEdit={editPrompt}
                     onGenerate={handleGeneratePrompt}
                   />
-                </>
-              ) : (
-                ""
-              )}
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
             {/* Right side - Text editor and buttons */}
-            <div className="w-1/2">
-              <div className="grid grid-cols-12">
-                <label className="block mb-2 font-semibold text-gray-700 col-span-9">
-                  Output
-                </label>
-                <div className="col-span-2 flex gap-1 pl-10">
-                  <button
-                    onClick={handleAIOutputFirstPage}
-                    className={`${
-                      projectData?.currentOutputIndex == 0 ||
-                      projectData?.project?.output?.length == 0
-                        ? "opacity-30 cursor-not-allowed"
-                        : "cursor-pointer"
-                    } `}
-                  >
-                    <FaChevronLeft />
-                  </button>
-                  <button className="text-sm">
-                    {projectData?.project?.output?.length
-                      ? `${projectData.currentOutputIndex + 1}/${
-                          projectData?.project?.output?.length
-                        }`
-                      : 0}
-                  </button>
-                  <button
-                    className={`${
-                      projectData?.project?.output?.length ==
-                        projectData?.currentOutputIndex + 1 ||
-                      projectData?.project?.output?.length == 0
-                        ? "opacity-30 cursor-not-allowed"
-                        : "cursor-pointer"
-                    } `}
-                    onClick={handleAIOutputNextPage}
-                  >
-                    <FaChevronRight />
-                  </button>
-                </div>
+            <div className="w-1/2 flex flex-col flex-1">
+              <div className="flex flex-col flex-1">
+                <div className="grid grid-cols-12">
+                  <label className="block mb-2 font-semibold text-gray-700 col-span-9">
+                    Output
+                  </label>
+                  <div className="col-span-2 flex gap-1 pl-10">
+                    <button
+                      onClick={handleAIOutputFirstPage}
+                      className={`${
+                        projectData?.currentOutputIndex == 0 ||
+                        projectData?.project?.output?.length == 0
+                          ? "opacity-30 cursor-not-allowed"
+                          : "cursor-pointer"
+                      } `}
+                    >
+                      <FaChevronLeft />
+                    </button>
+                    <button className="text-sm">
+                      {projectData?.project?.output?.length
+                        ? `${projectData.currentOutputIndex + 1}/${
+                            projectData?.project?.output?.length
+                          }`
+                        : 0}
+                    </button>
+                    <button
+                      className={`${
+                        projectData?.project?.output?.length ==
+                          projectData?.currentOutputIndex + 1 ||
+                        projectData?.project?.output?.length == 0
+                          ? "opacity-30 cursor-not-allowed"
+                          : "cursor-pointer"
+                      } `}
+                      onClick={handleAIOutputNextPage}
+                    >
+                      <FaChevronRight />
+                    </button>
+                  </div>
 
-                <span>
-                  <EyeButton
-                    show={promptData.showAiResponse}
-                    onClick={handleAIresponseShow}
-                    disabled={aiData.response ? false : true}
-                  />
-                </span>
-              </div>
-
-              {aiData?.scriptLoading ? (
-                <div className="flex items-center justify-center p-4 w-full border border-gray-300 rounded-lg shadow-sm bg-white h-[40rem] focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150">
-                  <Spinner />
+                  <span>
+                    <EyeButton
+                      show={promptData.showAiResponse}
+                      onClick={handleAIresponseShow}
+                      disabled={aiData.response ? false : true}
+                    />
+                  </span>
                 </div>
-              ) : promptData.showAiResponse && aiData.response ? (
-                <div className="p-4 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none resize-none h-[39rem] bg-white  focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150">
-                  <textarea
-                    name="ai_data"
-                    id="ai_data"
-                    value={aiData?.response}
-                    className="w-full resize-none h-[38rem] bg-white focus:outline-none overflow-scroll"
-                  ></textarea>
-                </div>
-              ) : (
-                <div className="p-4 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none resize-none h-[39rem] bg-white  focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 overflow-scroll">
-                  {aiData?.aiScriptSuggestion?.length > 0 ? (
-                    aiData.aiScriptSuggestion.map((line, i) => {
-                      return (
-                        <p
-                          key={i}
-                          className={`${
-                            handleColorAiScript(line) ? "text-blue-600" : ""
-                          }`}
-                          contentEditable
-                          suppressContentEditableWarning
-                          onBlur={(e) => handleEditAiContent(e, i)}
-                        >
-                          {line}
-                        </p>
-                      );
-                    })
-                  ) : promptData.scripts?.length > 0 ? (
-                    promptData.scripts.map((line, i) => {
-                      return <p key={i}>{line}</p>;
-                    })
+                <div className="flex flex-1 flex-col">
+                  {aiData?.scriptLoading ? (
+                    <div className="flex flex-1 h-full items-center justify-center p-4 w-full border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150">
+                      <Spinner />
+                    </div>
+                  ) : promptData.showAiResponse && aiData.response ? (
+                    <div className="flex flex-1 p-4 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none resize-none  bg-white  focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150">
+                      <textarea
+                        name="ai_data"
+                        id="ai_data"
+                        value={aiData?.response}
+                        className="flex-1 w-full resize-none bg-white focus:outline-none overflow-scroll"
+                      ></textarea>
+                    </div>
                   ) : (
-                    <span className="text-gray-500">Output contents...</span>
+                    <div className="p-4 h-[85vh] border border-gray-300 rounded-lg shadow-sm focus:outline-none resize-none bg-white  focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150 overflow-scroll">
+                      {aiData?.aiScriptSuggestion?.length > 0 ? (
+                        aiData.aiScriptSuggestion.map((line, i) => {
+                          return (
+                            <p
+                              key={i}
+                              className={`${
+                                handleColorAiScript(line) ? "text-blue-600" : ""
+                              }`}
+                              contentEditable
+                              suppressContentEditableWarning
+                              onBlur={(e) => handleEditAiContent(e, i)}
+                            >
+                              {line}
+                            </p>
+                          );
+                        })
+                      ) : promptData.scripts?.length > 0 ? (
+                        promptData.scripts.map((line, i) => {
+                          return <p key={i}>{line}</p>;
+                        })
+                      ) : (
+                        <span className="text-gray-500">
+                          Output contents...
+                        </span>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-
-              <div className="grid grid-cols-12 gap-4 mt-4">
+              </div>
+              <div className="grid grid-cols-12 gap-4 mt-2">
                 <div className="col-span-3">
                   <Button
                     className={`w-full text-white transition duration-150 bg-blue-600 hover:bg-blue-700  ${
@@ -734,7 +743,7 @@ const PromptEditor = () => {
               type={promptData.promptEdit}
             />
           )}
-        </>
+        </div>
       ) : (
         <Unauthorized />
       )}
