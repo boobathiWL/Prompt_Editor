@@ -145,7 +145,7 @@ export default function Users() {
     <>
       {user?.role_name === "super_admin" ? (
         <>
-          <div className="mt-8 p-8">
+          <div className="p-8">
             <div className="sm:flex sm:items-center">
               <div className="sm:flex-auto">
                 <h1 className="text-base font-semibold leading-6 text-gray-900">
@@ -214,7 +214,7 @@ export default function Users() {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className="divide-y bg-white">
                       {userData.loading ? (
                         <tr>
                           <td colSpan={7}>

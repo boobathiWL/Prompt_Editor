@@ -134,7 +134,7 @@ function Project() {
 
   return (
     <>
-      <div className="mt-8 p-8">
+      <div className="p-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <h1 className="text-base font-semibold leading-6 text-gray-900">
@@ -196,7 +196,7 @@ function Project() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y bg-white">
                   {projectData.loading ? (
                     <tr>
                       <td colSpan={6}>
