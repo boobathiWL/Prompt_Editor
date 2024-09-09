@@ -23,6 +23,7 @@ import router from "next/router";
 import ProjectForm from "@/components/project/form";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import VideoUploader from "@/components/video_upload";
+import DeleteModal from "@/components/delete_modal";
 
 const PromptEditor = () => {
   const user = useSelector((state: RootState) => state.user.userData);
@@ -48,6 +49,9 @@ const PromptEditor = () => {
     showAiResponse: false,
     generateControl: false,
     generate: false,
+    deleteModal: false,
+    deleteId: 0,
+    deleteLoading: false,
   });
 
   const [aiData, setAiData] = useSetState({
@@ -325,6 +329,39 @@ const PromptEditor = () => {
     }
     setPromptData({ videoLoading: false });
   };
+
+  const handlePromptDeleteClose = () => {
+    setPromptData({
+      deleteModal: false,
+      deleteId: 0,
+    });
+  };
+  const handlePromptDelete = (id) => {
+    setPromptData({
+      deleteModal: true,
+      deleteId: id,
+    });
+  };
+
+  const handlePromptDeleteComplete = async () => {
+    setPromptData({ deleteLoading: true });
+    try {
+      const response = await axios.delete(
+        `api/outline_prompt/outline_delete_prompt/${promptData.deleteId}`
+      );
+      if (response.status == 201) {
+        setPromptData({
+          deleteModal: false,
+          deleteId: 0,
+        });
+        getPromptsData();
+        success(response?.data?.message);
+      }
+    } catch (error) {
+      throwError(error?.response?.data?.message);
+    }
+    setPromptData({ deleteLoading: false });
+  };
   return (
     <>
       {user ? (
@@ -378,6 +415,7 @@ const PromptEditor = () => {
                   onGenerate={handleGeneratePrompt}
                   generateDisabled={promptData.generateControl}
                   className={true}
+                  onDelete={handlePromptDelete}
                 />
               </div>
             </div>
@@ -402,9 +440,10 @@ const PromptEditor = () => {
                     </button>
                     <button className="text-sm">
                       {projectData?.project?.output?.length
-                        ? `${projectData.currentOutputIndex + 1}/${
-                            projectData?.project?.output?.length
-                          }`
+                        ? `${
+                            projectData?.project?.output?.length -
+                            projectData.currentOutputIndex
+                          }/${projectData?.project?.output?.length}`
                         : 0}
                     </button>
                     <button
@@ -510,6 +549,14 @@ const PromptEditor = () => {
           onSave={handleProjectEditting}
           onClose={handleProjectModalClose}
           type={true}
+        />
+      )}
+      {promptData.deleteModal && (
+        <DeleteModal
+          open={promptData.deleteModal}
+          onDelete={handlePromptDeleteComplete}
+          onClose={handlePromptDeleteClose}
+          loading={promptData.deleteLoading}
         />
       )}
     </>

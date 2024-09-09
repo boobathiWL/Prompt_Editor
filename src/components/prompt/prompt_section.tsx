@@ -15,6 +15,7 @@ const PromptsSection = ({
   generate,
   generateDisabled = false,
   className = false,
+  onDelete,
 }) => (
   <div className="flex flex-col flex-1">
     <label className="block mb-2 font-semibold text-gray-700">Prompts</label>
@@ -42,7 +43,7 @@ const PromptsSection = ({
               key={i}
               className="flex items-center justify-between p-3 transition-shadow duration-150 border border-gray-300 rounded-lg shadow-sm bg-gray-50 hover:shadow-md"
             >
-              <span className="truncate w-[20rem] text-gray-800 font-medium flex items-center gap-2">
+              <span className="truncate text-gray-800 font-medium flex items-center gap-2">
                 {i + 1}. {prompt?.title}
                 {promptStatus?.includes(prompt?._id) ? <CircleWithTick /> : ""}
               </span>
@@ -78,7 +79,15 @@ const PromptsSection = ({
                     className="px-2 py-1 text-gray-700 text-wrap transition duration-150 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100"
                     onClick={() => onEdit(i)}
                   >
-                    Edit Prompt
+                    Edit
+                  </button>
+                )}
+                {role === "super_admin" && (
+                  <button
+                    className="px-2 py-1 ml-2 text-gray-700 text-wrap transition duration-150 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100"
+                    onClick={() => onDelete(prompt._id)}
+                  >
+                    Delete
                   </button>
                 )}
               </div>

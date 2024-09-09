@@ -2,36 +2,22 @@
 import connectMongoDB from "@/libs/connect";
 import type { NextApiRequest, NextApiResponse } from "next";
 import authMiddleware from "@/libs/authMiddleware";
-import project_schema from "@/libs/models/projects";
+import outline_project_schema from "@/libs/models/outline_projects";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectMongoDB();
 
-  if (req.method !== "POST") {
+  if (req.method !== "DELETE") {
     return res.status(405).json({ message: "Method Not Allowed" });
   }
 
   try {
-    const { output, id, script } = req.body;
-
+    const { id } = req.query;
     if (!id) {
       return res.status(400).json({ message: "Required fields empty" });
     }
-    const project = await project_schema.findById({ _id: id });
+    const project = await outline_project_schema.findByIdAndDelete({ _id: id });
     if (project) {
-      if (output) {
-        project.output = [output, ...project.output];
-      }
-      if (script) {
-        project.script = [script, ...project.script];
-      }
-    }
-
-    const updateProject = await project_schema.findByIdAndUpdate(
-      { _id: id },
-      project
-    );
-    if (updateProject) {
-      return res.status(201).json({ message: "Project edited successfully" });
+      return res.status(201).json({ message:"Project deleted successfully" });
     } else {
       return res.status(404).json({ message: "Project not found" });
     }

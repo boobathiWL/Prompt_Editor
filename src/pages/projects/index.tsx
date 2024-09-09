@@ -1,3 +1,4 @@
+import DeleteModal from "@/components/delete_modal";
 import EmptyData from "@/components/empty_data";
 import ProjectForm from "@/components/project/form";
 import Spinner from "@/components/Spinner";
@@ -11,7 +12,7 @@ import Admin from "@/layouts/admin_layout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { FaEdit, FaEye } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
 function Project() {
   const router = useRouter();
@@ -24,6 +25,9 @@ function Project() {
     projectEditData: {},
     projectEditIndex: 0,
     page: "Script",
+    deleteModal: false,
+    deleteId: 0,
+    deleteLoading: false,
   });
 
   const handleProjectModalClose = async () => {
@@ -33,6 +37,43 @@ function Project() {
       projectEdit: false,
       projectEditIndex: 0,
     });
+  };
+
+  const handleDeleteModalClose = () => {
+    setProjectData({
+      deleteModal: false,
+      deleteId: 0,
+    });
+  };
+
+  const handleDelete = async (id) => {
+    setProjectData({ deleteId: id, deleteModal: true });
+  };
+
+  const handleProjectDelete = async () => {
+    setProjectData({ deleteLoading: true });
+    try {
+      const response =
+        projectData.page == "Script"
+          ? await axios.delete(
+              `api/project/delete_project/${projectData.deleteId}`
+            )
+          : await axios.delete(
+              `api/outline_project/outline_delete_project/${projectData.deleteId}`
+            );
+      if (response.status == 201) {
+        setProjectData({
+          deleteModal: false,
+          deleteId: 0,
+          deleteLoading: false,
+        });
+        projectData.page == "Script" ? getProjects() : getProjects("outline");
+        success(response?.data?.message);
+      }
+    } catch (error) {
+      throwError(error?.response?.data?.message);
+    }
+    setProjectData({ deleteLoading: false });
   };
 
   const handleEdit = async (index) => {
@@ -194,12 +235,18 @@ function Project() {
                     >
                       Edit
                     </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
+                    >
+                      Delete
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y bg-white">
                   {projectData.loading ? (
                     <tr>
-                      <td colSpan={6}>
+                      <td colSpan={7}>
                         <div className="relative flex min-h-[150px] w-full items-center justify-center p-8 text-center ">
                           <Spinner />
                         </div>
@@ -254,11 +301,18 @@ function Project() {
                             <FaEdit onClick={() => handleEdit(index)} />
                           </div>
                         </td>
+                        <td className="relative whitespace-nowrap py-4 pl-3 text-sm font-medium text-right">
+                          <div className="flex justify-center items-center h-full text-red-600 hover:text-red-900 cursor-pointer">
+                            <FaTrash
+                              onClick={() => handleDelete(project._id)}
+                            />
+                          </div>
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={6}>
+                      <td colSpan={7}>
                         <EmptyData message="No records found." />
                       </td>
                     </tr>
@@ -280,6 +334,14 @@ function Project() {
           }
           onClose={handleProjectModalClose}
           type={projectData.projectEdit}
+        />
+      )}
+      {projectData.deleteModal && (
+        <DeleteModal
+          open={projectData.deleteModal}
+          onDelete={handleProjectDelete}
+          onClose={handleDeleteModalClose}
+          loading={projectData.deleteLoading}
         />
       )}
     </>
