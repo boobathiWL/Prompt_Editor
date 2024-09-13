@@ -70,7 +70,12 @@ const Login = () => {
     try {
       const response = await axios.post("api/auth/login", data);
       if (response.status == 201) {
-        success("Login mail send successfully");
+        const message = response?.data?.message;
+        if (response?.data?.link) {
+          router.replace(response?.data?.link);
+        } else {
+          success(message);
+        }
       }
     } catch (error) {
       throwError(error.response.data.message);
