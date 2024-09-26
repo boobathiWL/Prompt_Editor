@@ -260,7 +260,10 @@ function Project() {
                             className="text-gray-500 hover:text-blue-600 transition-colors duration-300"
                             onClick={() =>
                               router.push({
-                                pathname: `/script_editor`,
+                                pathname:
+                                  projectData.page == "Script"
+                                    ? `/script_editor`
+                                    : "/outline_editor",
                                 query: { project: project._id },
                               })
                             }
