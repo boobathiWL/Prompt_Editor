@@ -1,13 +1,13 @@
-import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-import jwt from "jsonwebtoken";
-import cookie from "cookie";
-import user_schema from "../models/user";
+import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
+import jwt from 'jsonwebtoken';
+import cookie from 'cookie';
+import user_schema from '../models/user';
 
 // Function to verify JWT token
 const verifyToken = (token: string | undefined) => {
   try {
     const JWT_SECRET = process.env.JWT_SECRET;
-    const decoded = jwt.verify(token || "", JWT_SECRET);
+    const decoded = jwt.verify(token || '', JWT_SECRET);
     return decoded;
   } catch (err) {
     return null;
@@ -20,15 +20,15 @@ const corsMiddleware = (
   res: NextApiResponse,
   next: () => void
 ) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from all origins
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from all origins
   res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
   );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   // Handle preflight requests
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
@@ -47,15 +47,14 @@ const authMiddleware = (handler: NextApiHandler) => {
       const token = parsedCookies?.token;
 
       if (!token) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: 'Unauthorized' });
       }
 
       const user = verifyToken(token);
 
-      const checkValidUser = await user_schema.findById({ _id: user.userId });
-
+      const checkValidUser = await user_schema.findById(user.userId);
       if (!checkValidUser) {
-        return res.status(401).json({ message: "Invalid token" });
+        return res.status(401).json({ message: 'Invalid token' });
       }
 
       // Attach user to the request object

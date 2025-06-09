@@ -42,6 +42,6 @@ const projectSchema = new mongoose.Schema({
 });
 
 // create a model
-const project_schema =
+const project_schema:any =
   mongoose.models.Project || mongoose.model("Project", projectSchema);
 export default project_schema;

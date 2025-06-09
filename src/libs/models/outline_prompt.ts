@@ -18,7 +18,7 @@ const outlinePromptSchema = new mongoose.Schema({
 });
 
 // create a model
-const outline_prompt_schema =
+const outline_prompt_schema:any =
   mongoose.models.Outline_Prompt ||
   mongoose.model("Outline_Prompt", outlinePromptSchema);
 export default outline_prompt_schema;

@@ -29,7 +29,7 @@ export default async function handler(
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const getRoleMember = await role_schema.findOne({ role_name: "member" });
-    let role_id = "";
+    let role_id:any = "";
     if (getRoleMember) {
       role_id = getRoleMember._id;
     } else {

@@ -30,7 +30,7 @@ const outlineProjectSchema = new mongoose.Schema({
 });
 
 // create a model
-const outline_project_schema =
+const outline_project_schema:any =
   mongoose.models.Outline_Project ||
   mongoose.model("Outline_Project", outlineProjectSchema);
 export default outline_project_schema;

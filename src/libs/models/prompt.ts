@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 // saving the data in DB
 // defining a schema
@@ -18,6 +18,6 @@ const promptSchema = new mongoose.Schema({
 });
 
 // create a model
-const prompt_schema =
-  mongoose.models.Prompt || mongoose.model("Prompt", promptSchema);
+const prompt_schema: any =
+  mongoose.models.Prompt || mongoose.model('Prompt', promptSchema);
 export default prompt_schema;
